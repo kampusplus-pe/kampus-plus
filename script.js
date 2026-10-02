@@ -1,28 +1,14 @@
-/* =========================================================
-   KAMPUS+ — INTERACCIONES DE LA PÁGINA
-   Versión 1.0 · Octubre de 2026
-   Autores: [completar con los nombres del equipo]
-
-   Índice:
-   1. Fotos (carga suave y respaldo si no cargan)
-   2. Datos del catálogo
-   3. Utilidades
-   4. Menú y encabezado
-   5. Animaciones al hacer scroll
-   6. Catálogo: búsqueda, filtros, orden y favoritos
-   7. Ventanas: detalle de producto, descarga y términos
-   8. Formulario "Publicar" y calculadora
-   9. Pestañas "¿Cómo funciona?"
-   10. Reseñas (carrusel en celular)
-   11. Resaltado al llegar desde "¿Qué es Kampus+?"
-   12. Datos compartidos con el chatbot (chatbot.js)
-   ========================================================= */
+/*
+  Kampus+ - JavaScript de la landing page
+  Versión 1.0 (octubre 2026)
+  El código del chatbot está aparte en chatbot.js
+*/
 (() => {
   'use strict';
 
-  /* ---------- 1. Fotos ----------
-     Las fotos aparecen con un fundido suave al cargar.
-     Si una foto no carga (sin internet, enlace roto), se muestra un fondo con ícono. */
+  // ===== 1. Fotos =====
+  // Las fotos aparecen poco a poco cuando cargan.
+  // Si alguna no carga (por ejemplo sin internet) se muestra un fondo con un ícono.
   document.documentElement.classList.add('js');
 
   const markLoaded = (img) => img.classList.add('is-loaded');
@@ -50,9 +36,9 @@
     markBroken(img);
   }, true);
 
-  /* ---------- 2. Datos del catálogo ----------
-     Cada producto usa fotos de Unsplash (solo el código de la foto en "photos").
-     Para usar tus propias fotos, escribe la ruta completa, por ejemplo: photos: ['img/calculadora.jpg'] */
+  // ===== 2. Datos del catálogo =====
+  // Las fotos son de Unsplash, en "photos" va solo el código de cada foto.
+  // También se puede poner una ruta propia, por ejemplo 'img/calculadora.jpg'.
   const photo = (id, w = 600, h = w) =>
     /^(https?:|img\/|\.\/|\/)/.test(id)
       ? id
@@ -180,7 +166,7 @@
     }
   ];
 
-  /* ---------- 3. Utilidades ---------- */
+  // ===== 3. Utilidades =====
   const $ = (sel, ctx = document) => ctx.querySelector(sel);
   const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -215,7 +201,7 @@
   const yearEl = $('#year');
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-  /* ---------- 4. Menú y encabezado ---------- */
+  // ===== 4. Menú y encabezado =====
   const header = $('#header');
   const navToggle = $('#nav-toggle');
 
@@ -250,7 +236,7 @@
     $$('main > section[id]').forEach((section) => spy.observe(section));
   }
 
-  /* ---------- 5. Animaciones al hacer scroll ---------- */
+  // ===== 5. Animaciones al hacer scroll =====
   const revealEls = $$('.reveal');
   if ('IntersectionObserver' in window && !reduceMotion) {
     const revealer = new IntersectionObserver((entries) => {
@@ -266,7 +252,7 @@
     revealEls.forEach((el) => el.classList.add('is-visible'));
   }
 
-  /* ---------- 6. Catálogo ---------- */
+  // ===== 6. Catálogo =====
   const grid = $('#product-grid');
   const countEl = $('#catalog-count');
   const emptyEl = $('#catalog-empty');
@@ -370,6 +356,12 @@
     searchTimer = setTimeout(renderCatalog, 150);
   });
 
+  // Botón "Ver todos los productos" (aparece cuando la búsqueda no encuentra nada)
+  $('#catalog-reset').addEventListener('click', () => {
+    searchInput.value = '';
+    filterBtns.find((b) => b.dataset.filter === 'todos').click();
+  });
+
   grid.addEventListener('click', (e) => {
     const favBtn = e.target.closest('[data-fav]');
     if (favBtn) {
@@ -387,7 +379,7 @@
 
   renderCatalog();
 
-  /* ---------- 7. Ventanas (modales) ---------- */
+  // ===== 7. Ventanas (modales) =====
   const productModal = $('#product-modal');
   const productContent = $('#product-modal-content');
   const downloadModal = $('#download-modal');
@@ -511,7 +503,7 @@
     openDialog(downloadModal);
   }
 
-  // Botones de abrir / cerrar (funciona también con contenido creado por JS)
+  // Botones para abrir y cerrar ventanas (también sirve para lo que se crea con JS)
   document.addEventListener('click', (e) => {
     const closeBtn = e.target.closest('[data-close]');
     if (closeBtn) {
@@ -525,12 +517,12 @@
     }
   });
 
-  // Botones de tiendas: la app todavía no está publicada, así que avisamos "muy pronto"
+  // Botones de tiendas: como la app aún no está publicada, avisamos "muy pronto"
   $$('[data-store]').forEach((boton) => {
     boton.addEventListener('click', () => { storeStatus.hidden = false; });
   });
 
-  // Redes sociales todavía en preparación (enlaces con data-soon)
+  // Redes sociales que todavía no tenemos (enlaces con data-soon)
   $$('[data-soon]').forEach((enlace) => {
     enlace.addEventListener('click', (e) => {
       e.preventDefault();
@@ -538,7 +530,7 @@
     });
   });
 
-  // Ventana de Términos de servicio y Privacidad de datos (con dos pestañas)
+  // Ventana de Términos y Privacidad (tiene dos pestañas)
   const legalModal = $('#legal-modal');
   const legalTabs = $$('[data-legal-tab]');
 
@@ -559,7 +551,7 @@
     });
   });
 
-  /* ---------- 8. Formulario "Publicar" y calculadora ---------- */
+  // ===== 8. Formulario "Publicar" y calculadora =====
   const pubForm = $('#publish-form');
   const pubPrice = $('#pub-price');
   const pubNet = $('#pub-net');
@@ -635,7 +627,37 @@
   });
   updateCalculator(false);
 
-  /* ---------- 9. Pestañas "¿Cómo funciona?" ---------- */
+  // Formulario de novedades del banner final
+  // Es de muestra: revisa que el correo sea institucional, pero no lo envía ni lo guarda.
+  const notifyForm = $('#notify-form');
+  const notifyEmail = $('#notify-email');
+  const notifyMsg = $('#notify-msg');
+
+  function avisoNovedades(tipo, texto) {
+    notifyMsg.className = `notify__msg is-${tipo}`;
+    notifyMsg.innerHTML = `${icon(tipo === 'ok' ? 'check' : 'x')}<span></span>`;
+    notifyMsg.querySelector('span').textContent = texto; // el correo va como texto
+    notifyMsg.hidden = false;
+    notifyForm.classList.toggle('is-error', tipo === 'error');
+  }
+
+  notifyForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const correo = notifyEmail.value.trim().toLowerCase();
+    if (!correo) {
+      avisoNovedades('error', 'Escribe tu correo universitario.');
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)) {
+      avisoNovedades('error', 'Revisa tu correo, parece que está incompleto (por ejemplo, le falta la @).');
+    } else if (!correo.endsWith('.edu.pe')) {
+      avisoNovedades('error', 'Usa tu correo institucional, el que termina en .edu.pe.');
+    } else {
+      avisoNovedades('ok', `¡Listo! Te avisaremos a ${correo} cuando Kampus+ esté disponible.`);
+      notifyForm.reset();
+    }
+  });
+  notifyEmail.addEventListener('input', () => notifyForm.classList.remove('is-error'));
+
+  // ===== 9. Pestañas "¿Cómo funciona?" =====
   const switchEl = $('.switch');
   const tabs = $$('.switch__btn');
 
@@ -667,7 +689,7 @@
     });
   });
 
-  /* ---------- 10. Reseñas (carrusel en celular) ---------- */
+  // ===== 10. Reseñas (carrusel en celular) =====
   const reviewsTrack = $('#reviews');
   $$('.reviews-nav__btn').forEach((btn) => {
     btn.addEventListener('click', () => {
@@ -677,7 +699,7 @@
     });
   });
 
-  /* ---------- 11. Resaltado al llegar desde "¿Qué es Kampus+?" ---------- */
+  // ===== 11. Resaltado al llegar desde "¿Qué es Kampus+?" =====
   $$('[data-highlight]').forEach((link) => {
     link.addEventListener('click', () => {
       const target = $(link.dataset.highlight);
@@ -693,9 +715,9 @@
     if (e.animationName === 'highlight') e.target.classList.remove('is-highlight');
   });
 
-  /* ---------- 12. Datos compartidos con el chatbot (chatbot.js) ----------
-     El chatbot está en su propio archivo y necesita los productos y
-     algunas funciones de este archivo. Aquí se los "prestamos". */
+  // ===== 12. Datos que usa el chatbot =====
+  // chatbot.js necesita los productos y algunas funciones de este archivo,
+  // por eso los dejamos en window.Kampus.
   window.Kampus = {
     PRODUCTS, CATEGORIES, SELLERS,
     photo, money, normalize, discount, icon, toast, openProduct, reduceMotion

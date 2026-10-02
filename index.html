@@ -1,13 +1,8 @@
 <!DOCTYPE html>
 <!--
-  =========================================================
-  KAMPUS+ — LANDING PAGE
-  Marketplace universitario para comprar y vender entre estudiantes.
-  Versión: 1.0 · Octubre de 2026
-  Autores: [completar con los nombres del equipo]
-  Archivos del proyecto: index.html, styles.css, chatbot.css,
-  script.js, chatbot.js e img/producto.png
-  =========================================================
+  Kampus+ - Landing page
+  Marketplace para que estudiantes universitarios compren y vendan entre ellos.
+  Versión 1.0 (octubre 2026)
 -->
 <html lang="es">
 <head>
@@ -18,12 +13,12 @@
   <meta name="author" content="Equipo Kampus+">
   <meta name="theme-color" content="#1f5eff">
 
-  <!-- Vista previa al compartir el enlace (WhatsApp, redes) -->
+  <!-- Para que se vea bien al compartir el link -->
   <meta property="og:title" content="Kampus+ | Compra y vende cerca a tu universidad">
   <meta property="og:description" content="El marketplace para estudiantes universitarios. Vende lo que ya no usas con solo 5% de comisión.">
   <meta property="og:type" content="website">
 
-  <!-- Ícono de la pestaña del navegador (logo K+ dibujado en SVG) -->
+  <!-- Favicon (logo K+ en SVG) -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%234a86ff'/%3E%3Cstop offset='1' stop-color='%231a4fe0'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='3' y='9' width='50' height='50' rx='14' fill='url(%23g)'/%3E%3Ctext x='28' y='46' font-family='Arial,Helvetica,sans-serif' font-size='32' font-weight='700' fill='white' text-anchor='middle'%3EK%3C/text%3E%3Ccircle cx='51' cy='13' r='10' fill='%2312b76a' stroke='white' stroke-width='3'/%3E%3Cpath d='M51 8.5v9M46.5 13h9' stroke='white' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E">
 
   <!-- Tipografía -->
@@ -31,7 +26,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-  <!-- Íconos oficiales de redes sociales: Font Awesome Free 6.5.2 (licencia CC BY 4.0) -->
+  <!-- Íconos de redes sociales (Font Awesome) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/fontawesome.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/brands.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
 
@@ -40,17 +35,15 @@
 
   <!-- Estilos de la página -->
   <link rel="stylesheet" href="styles.css">
-  <!-- Estilos del chatbot (van después, porque usan los colores de styles.css) -->
+  <!-- Estilos del chatbot (van después de styles.css) -->
   <link rel="stylesheet" href="chatbot.css">
 
-  <!-- Si el navegador no tiene JavaScript, se muestran las secciones sin animación -->
+  <!-- Si no hay JavaScript se muestran las secciones sin animación -->
   <noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
 </head>
 <body>
 
-  <!-- =====================================================
-       ÍCONOS (se reutilizan en toda la página con <use>)
-       ===================================================== -->
+  <!-- ========== ÍCONOS SVG (se usan con <use>) ========== -->
   <svg class="sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
     <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.8-3.8"/></symbol>
     <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
@@ -97,9 +90,7 @@
     <symbol id="i-bot" viewBox="0 0 24 24"><rect x="4" y="7.5" width="16" height="12" rx="4"/><path d="M12 7.5V4M9.5 13h.01M14.5 13h.01" stroke-width="2.6"/><path d="M9.5 16.5h5M2 12.5v3M22 12.5v3"/></symbol>
   </svg>
 
-  <!-- =====================================================
-       ENCABEZADO / MENÚ
-       ===================================================== -->
+  <!-- ========== ENCABEZADO ========== -->
   <header class="header" id="header">
     <div class="container header__inner">
       <a href="#inicio" class="brand" aria-label="Kampus+, ir al inicio">
@@ -114,14 +105,14 @@
           <li><a class="nav__link" href="#como-funciona">¿Cómo funciona?</a></li>
           <li><a class="nav__link" href="#resenas">Reseñas</a></li>
         </ul>
-        <button type="button" class="btn btn--primary btn--block nav__cta" data-open="download">
-          <svg class="ic" aria-hidden="true"><use href="#i-download"/></svg> Descargar aplicación
-        </button>
       </nav>
 
-      <button type="button" class="btn btn--primary btn--sm header__cta" data-open="download">
-        <svg class="ic" aria-hidden="true"><use href="#i-download"/></svg> Descargar app
-      </button>
+      <!-- Lleva al formulario de novedades del final de la página -->
+      <a href="#novedades" class="header__notify" data-highlight="#notify-form"
+         aria-label="Avísame del lanzamiento" title="Avísame del lanzamiento">
+        <svg class="ic" aria-hidden="true"><use href="#i-bell"/></svg>
+        <span class="dot-live" aria-hidden="true"></span>
+      </a>
 
       <button type="button" class="nav-toggle" id="nav-toggle" aria-controls="nav" aria-expanded="false" aria-label="Abrir menú">
         <svg class="ic nav-toggle__open" aria-hidden="true"><use href="#i-menu"/></svg>
@@ -132,9 +123,7 @@
 
   <main>
 
-    <!-- =====================================================
-         1. INICIO (HERO)
-         ===================================================== -->
+    <!-- ========== INICIO ========== -->
     <section class="hero" id="inicio">
       <div class="hero__bg" aria-hidden="true"></div>
 
@@ -168,7 +157,7 @@
             </div>
           </div>
 
-          <!-- Único botón del inicio -->
+          <!-- Único botón de descarga de toda la página -->
           <div class="hero__actions reveal d-4">
             <button type="button" class="btn btn--primary btn--lg" data-open="download">
               <svg class="ic" aria-hidden="true"><use href="#i-download"/></svg> Descargar aplicación
@@ -186,7 +175,7 @@
             </li>
             <li>
               <span class="feature-ic feature-ic--green"><svg class="ic" aria-hidden="true"><use href="#i-wallet"/></svg></span>
-              <div><strong>Solo 5% comisión</strong><span>El 95% neto es para ti</span></div>
+              <div><strong>Publica gratis</strong><span>En menos de 1 minuto</span></div>
             </li>
             <li>
               <span class="feature-ic feature-ic--purple"><svg class="ic" aria-hidden="true"><use href="#i-pin"/></svg></span>
@@ -246,9 +235,7 @@
       </div>
     </section>
 
-    <!-- =====================================================
-         2. ¿QUÉ ES KAMPUS+?
-         ===================================================== -->
+    <!-- ========== ¿QUÉ ES KAMPUS+? ========== -->
     <section class="section" id="que-es">
       <div class="container">
         <header class="section-head">
@@ -288,15 +275,15 @@
             <div class="concept-card__media media">
               <img src="https://images.unsplash.com/photo-1519682337058-a94d519337bc?auto=format&fit=crop&crop=focalpoint&fp-x=.5&fp-y=.55&fp-z=2.2&w=800&h=520&q=80"
                    alt="Mano sosteniendo una pila de libros" loading="lazy">
-              <span class="pill pill--glass">Solo 5% comisión por venta</span>
+              <span class="pill pill--glass">Publicación gratis</span>
             </div>
             <div class="concept-card__body">
               <span class="concept-card__ic"><svg class="ic" aria-hidden="true"><use href="#i-wallet"/></svg></span>
               <h3>Vende</h3>
               <p class="concept-card__kicker">Genera ingresos rápidos</p>
               <p class="concept-card__text">
-                Monetiza lo que ya aprobaste o lo que ya no usas. Publica en 30 segundos y recibe el 95% de tus ingresos
-                directo a tu Yape con una comisión mínima de solo 5%.
+                Monetiza lo que ya aprobaste o lo que ya no usas. Publica en 30 segundos y recibe el pago de tus
+                ventas directo en tu Yape.
               </p>
               <a href="#vende" class="concept-card__link" data-highlight="#publish-phone">
                 Publica tu producto
@@ -330,9 +317,7 @@
       </div>
     </section>
 
-    <!-- =====================================================
-         3. COMPRA — CATÁLOGO (destino de "Ver catálogo")
-         ===================================================== -->
+    <!-- ========== CATÁLOGO ========== -->
     <section class="section section--soft" id="compra">
       <div class="container">
         <header class="section-head">
@@ -396,25 +381,21 @@
           <span class="catalog-empty__ic"><svg class="ic" aria-hidden="true"><use href="#i-search"/></svg></span>
           <h3 id="empty-title">Aún no hay publicaciones aquí</h3>
           <p id="empty-text">¿Tienes algo de esta categoría? Publícalo y sé el primero en vender.</p>
-          <button type="button" class="btn btn--primary btn--sm" data-open="download"
-                  data-context="Publica tu producto desde la app y paga solo 5% de comisión cuando vendas.">
-            <svg class="ic" aria-hidden="true"><use href="#i-download"/></svg> Descargar aplicación
+          <button type="button" class="btn btn--primary btn--sm" id="catalog-reset">
+            <svg class="ic" aria-hidden="true"><use href="#i-grid"/></svg> Ver todos los productos
           </button>
         </div>
       </div>
     </section>
 
-    <!-- =====================================================
-         4. VENDE (destino de "Publica tu producto")
-         ===================================================== -->
+    <!-- ========== VENDE ========== -->
     <section class="section" id="vende">
       <div class="container">
         <header class="section-head">
           <span class="eyebrow eyebrow--green reveal"><span class="eyebrow__dot"></span>Para vendedores universitarios</span>
           <h2 class="section-title reveal d-1">Lo que ya no usas, puede ser justo lo que alguien busca.</h2>
           <p class="section-lead reveal d-2">
-            Libera espacio en tu cuarto, ayuda a compañeros de ciclos menores y genera dinero extra con una
-            <strong>comisión mínima de solo 5%</strong>.
+            Libera espacio en tu cuarto, ayuda a compañeros de ciclos menores y gana dinero extra cada ciclo.
           </p>
         </header>
 
@@ -513,20 +494,20 @@
                     <strong>Yape · 987 *** 210</strong>
                   </div>
 
-                  <button type="submit" class="pub-submit">Publicar ahora (solo 5% de comisión)</button>
+                  <button type="submit" class="pub-submit">Publicar ahora</button>
                   <p class="pub-note">Visible para estudiantes de tu universidad</p>
                 </form>
               </div>
             </div>
           </div>
 
-          <!-- Beneficios + calculadora -->
+          <!-- Beneficios y calculadora -->
           <div class="sell-content">
             <h3 class="sell-title reveal">Vender en Kampus+ toma menos de 1 minuto</h3>
             <p class="sell-text reveal d-1">
-              Olvídate de publicar en grupos de WhatsApp caóticos, historias de Instagram que se pierden o pagar
-              comisiones abusivas. En Kampus+ recibes el 95% neto de cada venta directamente en tu Yape, con solo
-              5% de comisión para respaldar la verificación y la seguridad.
+              Olvídate de publicar en grupos de WhatsApp caóticos o en historias de Instagram que se pierden.
+              En Kampus+ publicas una vez, los compradores de tu universidad te encuentran fácilmente y el pago
+              llega directo a tu Yape.
             </p>
 
             <div class="commission-card reveal d-2">
@@ -591,10 +572,9 @@
                   <strong class="calc__total" id="calc-total" aria-live="polite">S/ 380.00</strong>
                   <span class="calc__breakdown" id="calc-breakdown">Venta bruta: S/ 400.00 • Comisión 5%: S/ 20.00</span>
                 </div>
-                <button type="button" class="btn btn--green" data-open="download"
-                        data-context="Publica tus cosas desde la app y recibe el 95% de cada venta.">
-                  Empieza a vender <svg class="ic" aria-hidden="true"><use href="#i-arrow-right"/></svg>
-                </button>
+                <a href="#publish-phone" class="btn btn--green" data-highlight="#publish-phone">
+                  Publica tu producto <svg class="ic" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+                </a>
               </div>
             </div>
           </div>
@@ -602,9 +582,7 @@
       </div>
     </section>
 
-    <!-- =====================================================
-         5. ¿CÓMO FUNCIONA KAMPUS+?
-         ===================================================== -->
+    <!-- ========== ¿CÓMO FUNCIONA? ========== -->
     <section class="section section--soft" id="como-funciona">
       <div class="container">
         <header class="section-head">
@@ -712,7 +690,7 @@
                   </span>
                   <div><strong>Kit de dibujo técnico</strong><small>Precio fijado: S/ 75.00</small></div>
                 </div>
-                <p class="mini-caption"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg> Publicación gratis • Solo 5% al vender</p>
+                <p class="mini-caption"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg> Publicación gratis • Visible en tu universidad</p>
               </div>
             </article>
 
@@ -739,8 +717,8 @@
                 <span class="step__ic c-green"><svg class="ic" aria-hidden="true"><use href="#i-wallet"/></svg></span>
               </div>
               <h3>Cobra tu 95%</h3>
-              <p class="step__kicker">Solo 5% de comisión</p>
-              <p class="step__text">Al confirmar la entrega, recibes el 95% del dinero directo en tu Yape. El 5% de comisión protege tu dinero y garantiza la transacción.</p>
+              <p class="step__kicker">Directo a tu Yape</p>
+              <p class="step__text">Cuando el comprador confirma la entrega, el dinero se libera y llega a tu Yape, ya descontada la comisión.</p>
               <div class="step__demo">
                 <div class="mini-cash">
                   <small>¡Saldo liberado al 95%!</small>
@@ -754,9 +732,7 @@
       </div>
     </section>
 
-    <!-- =====================================================
-         6. COMUNIDAD (destino de "Conocer más")
-         ===================================================== -->
+    <!-- ========== COMUNIDAD ========== -->
     <section class="section" id="comunidad">
       <div class="container community">
         <div class="community__content">
@@ -836,10 +812,7 @@
       </div>
     </section>
 
-    <!-- =====================================================
-         7. RESEÑAS
-         Reseñas de ejemplo: reemplázalas por reseñas reales de tus usuarios.
-         ===================================================== -->
+    <!-- ========== RESEÑAS (son de ejemplo) ========== -->
     <section class="section section--soft" id="resenas">
       <div class="container">
         <header class="section-head">
@@ -957,10 +930,8 @@
       </div>
     </section>
 
-    <!-- =====================================================
-         8. LLAMADO FINAL
-         ===================================================== -->
-    <section class="cta-section">
+    <!-- ========== BANNER FINAL ========== -->
+    <section class="cta-section" id="novedades">
       <div class="container">
         <div class="cta reveal">
           <div class="cta__bg media" aria-hidden="true">
@@ -969,12 +940,27 @@
           <div class="cta__content">
             <span class="eyebrow eyebrow--glass"><svg class="ic" aria-hidden="true"><use href="#i-sparkles"/></svg>Lanzamiento universitario 2026</span>
             <h2>Tu campus también puede ser un marketplace.</h2>
-            <p>Compra, vende y conecta con estudiantes como tú. 95% de ganancias netas para ti con solo 5% de comisión.</p>
-            <button type="button" class="btn btn--white btn--lg" data-open="download">
-              <svg class="ic" aria-hidden="true"><use href="#i-download"/></svg> Descargar aplicación
-            </button>
+            <p>Déjanos tu correo universitario y te avisaremos cuando la app esté disponible, junto con las novedades del lanzamiento.</p>
+
+            <!-- Formulario de novedades (es de muestra: revisa el correo pero no lo envía ni lo guarda) -->
+            <form class="notify" id="notify-form" novalidate>
+              <label class="notify__field">
+                <svg class="ic" aria-hidden="true"><use href="#i-mail"/></svg>
+                <input type="email" id="notify-email" placeholder="tucorreo@universidad.edu.pe" autocomplete="email"
+                       maxlength="80" aria-label="Correo universitario" aria-describedby="notify-msg">
+              </label>
+              <button type="submit" class="btn btn--primary">
+                Avisarme <svg class="ic" aria-hidden="true"><use href="#i-bell"/></svg>
+              </button>
+            </form>
+            <p class="notify__msg" id="notify-msg" role="status" aria-live="polite" hidden></p>
+            <p class="notify__note">
+              Solo correos institucionales (.edu.pe). Al suscribirte aceptas nuestra
+              <button type="button" data-legal="privacidad">Política de privacidad</button>.
+            </p>
+
             <ul class="cta__checks">
-              <li><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Solo 5% comisión por venta</li>
+              <li><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Entrega cerca a tu universidad</li>
               <li><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Verificación con correo @edu.pe</li>
               <li><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Cobro directo con Yape</li>
             </ul>
@@ -985,9 +971,7 @@
 
   </main>
 
-  <!-- =====================================================
-       PIE DE PÁGINA
-       ===================================================== -->
+  <!-- ========== FOOTER ========== -->
   <footer class="footer">
     <div class="container footer__grid">
       <div class="footer__brand">
@@ -997,10 +981,9 @@
         </a>
         <p>
           El marketplace exclusivo para estudiantes universitarios. Compra, vende y conecta en tu comunidad
-          universitaria de manera fácil, rápida, segura y con solo 5% de comisión por venta.
+          universitaria de manera fácil, rápida y segura.
         </p>
-        <!-- Redes sociales: versión demostrativa. Cuando existan las cuentas,
-             reemplaza href="#" por el enlace real y quita data-soon -->
+        <!-- Redes sociales (todavía no tenemos las cuentas, por ahora dicen "muy pronto") -->
         <div class="socials">
           <a href="#" data-soon class="social social--instagram" aria-label="Instagram (próximamente)" title="Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a>
           <a href="#" data-soon class="social social--tiktok" aria-label="TikTok (próximamente)" title="TikTok"><i class="fa-brands fa-tiktok" aria-hidden="true"></i></a>
@@ -1014,7 +997,7 @@
           <li><a href="#inicio">Inicio</a></li>
           <li><a href="#que-es">¿Qué es Kampus+?</a></li>
           <li><a href="#compra">Catálogo</a></li>
-          <li><a href="#vende">Vende (solo 5% comisión)</a></li>
+          <li><a href="#vende">Vende</a></li>
           <li><a href="#como-funciona">¿Cómo funciona?</a></li>
           <li><a href="#resenas">Reseñas</a></li>
         </ul>
@@ -1039,9 +1022,6 @@
           <li><i class="fa-brands fa-whatsapp ic--green" aria-hidden="true"></i><a href="https://wa.me/51967207495" target="_blank" rel="noopener">+51 967 207 495</a></li>
           <li><svg class="ic ic--pink" aria-hidden="true"><use href="#i-pin"/></svg><span>Lima, Perú</span></li>
         </ul>
-        <button type="button" class="btn btn--primary btn--sm footer__cta" data-open="download">
-          <svg class="ic" aria-hidden="true"><use href="#i-download"/></svg> Descargar aplicación
-        </button>
       </div>
     </div>
 
@@ -1054,7 +1034,7 @@
       </ul>
     </div>
 
-    <!-- Aviso legal: esta es una versión demostrativa (proyecto académico) -->
+    <!-- Aviso legal -->
     <div class="container footer__legal">
       <p>
         Proyecto académico con fines demostrativos. Kampus+ no está afiliado a las universidades ni a las marcas
@@ -1064,9 +1044,7 @@
     </div>
   </footer>
 
-  <!-- =====================================================
-       VENTANA: DESCARGAR APLICACIÓN
-       ===================================================== -->
+  <!-- ========== VENTANA DESCARGAR APP ========== -->
   <dialog class="modal modal--download" id="download-modal" aria-labelledby="download-title">
     <div class="modal__hero">
       <button type="button" class="modal__close" data-close aria-label="Cerrar">
@@ -1074,12 +1052,12 @@
       </button>
       <span class="brand__mark brand__mark--lg" aria-hidden="true">K</span>
       <h2 id="download-title">Descarga Kampus+</h2>
-      <p>La app estará disponible muy pronto · Solo 5% de comisión</p>
+      <p>La app estará disponible muy pronto</p>
     </div>
     <div class="modal__body">
       <p class="modal__context" id="download-context" hidden></p>
 
-      <!-- Cuando la app esté publicada, cambia cada botón por un enlace <a href="..."> a la tienda -->
+      <!-- Botones de las tiendas (la app todavía no está publicada) -->
       <div class="stores">
         <button type="button" class="store-btn" data-store>
           <svg class="ic" aria-hidden="true"><use href="#i-phone"/></svg>
@@ -1100,9 +1078,7 @@
     </div>
   </dialog>
 
-  <!-- =====================================================
-       VENTANA: TÉRMINOS Y PRIVACIDAD
-       ===================================================== -->
+  <!-- ========== VENTANA TÉRMINOS Y PRIVACIDAD ========== -->
   <dialog class="modal modal--legal" id="legal-modal" aria-labelledby="legal-title">
     <div class="legal">
       <div class="legal__head">
@@ -1139,7 +1115,7 @@
       <article class="legal__body" id="legal-privacidad" role="tabpanel" aria-labelledby="tab-privacidad" hidden>
         <h3>¿Qué datos usa esta página?</h3>
         <ul>
-          <li>No pide ni guarda datos personales: no tiene registro de usuarios ni formularios que envíen información.</li>
+          <li>No guarda datos personales: no tiene registro de usuarios y el formulario de novedades es de muestra, revisa que el correo sea institucional pero no lo envía ni lo guarda.</li>
           <li>El chatbot funciona dentro de tu navegador: lo que escribes no se guarda ni se envía a ningún servidor.</li>
           <li>Para mostrar tipografías, íconos e imágenes, tu navegador se conecta a Google Fonts, cdnjs (Cloudflare)
           y Unsplash, que pueden registrar datos técnicos de conexión (como la dirección IP) según sus propias políticas.</li>
@@ -1153,20 +1129,13 @@
     </div>
   </dialog>
 
-  <!-- =====================================================
-       VENTANA: DETALLE DE PRODUCTO (se llena desde script.js)
-       ===================================================== -->
+  <!-- ========== VENTANA DETALLE DE PRODUCTO (se llena con script.js) ========== -->
   <dialog class="modal modal--product" id="product-modal" aria-labelledby="pm-title">
     <div id="product-modal-content"></div>
   </dialog>
 
-  <!-- =====================================================
-       CHATBOT: ASISTENTE VIRTUAL DE KAMPUS+
-       Se basa en el ejemplo de clase (CRONICS ASESOR):
-       cabecera + cuerpo de mensajes + pie de entrada.
-       La diferencia es que aquí vive "flotando" sobre la página:
-       un botón redondo abre y cierra el panel del chat.
-       ===================================================== -->
+  <!-- ========== CHATBOT ========== -->
+  <!-- Basado en el ejemplo de clase: cabecera, mensajes y campo para escribir. Se abre con el botón redondo -->
   <div class="chatbot" id="chatbot">
 
     <!-- Globo de invitación que aparece unos segundos después de entrar -->
@@ -1188,7 +1157,7 @@
     <!-- Panel del chat (misma estructura que el ejemplo de clase) -->
     <section class="chatbot__panel contenedor-chat" id="chatbot-panel" role="dialog" aria-label="Asistente virtual de Kampus+" inert>
 
-      <!-- Cabecera: logo + nombre del asistente -->
+      <!-- Cabecera: logo y nombre del asistente -->
       <header class="cabecera">
         <span class="brand__mark cabecera__logo" aria-hidden="true">K</span>
         <div class="info-cabecera">
@@ -1203,8 +1172,8 @@
         </button>
       </header>
 
-      <!-- Cuerpo de mensajes: aquí el JavaScript va agregando las burbujas -->
-      <!-- (En el ejemplo era <main>, pero la página ya tiene un <main>, así que usamos <div>) -->
+      <!-- Cuerpo de mensajes: aquí se van agregando las burbujas desde JavaScript -->
+      <!-- (en el ejemplo era <main>, pero como la página ya tiene uno usamos <div>) -->
       <div class="mensajes" id="cuerpoChat" role="log" aria-live="polite"></div>
 
       <!-- Sugerencias rápidas: al hacer clic se envían como si el usuario las escribiera -->
@@ -1217,7 +1186,7 @@
         <button type="button" data-ask="¿Dónde se hace la entrega?">Puntos de entrega</button>
       </div>
 
-      <!-- Pie de entrada: campo de texto + botón Enviar -->
+      <!-- Pie: campo de texto y botón Enviar -->
       <footer class="entrada">
         <input type="text" placeholder="Escribe tu mensaje..." id="inputMensaje" autocomplete="off" maxlength="200" aria-label="Escribe tu mensaje">
         <button type="button" id="botonEnviar" disabled aria-label="Enviar mensaje">
@@ -1232,7 +1201,7 @@
 
   <!-- JavaScript de la página -->
   <script src="script.js" defer></script>
-  <!-- JavaScript del chatbot (va después, porque usa los productos de script.js) -->
+  <!-- JavaScript del chatbot (va después de script.js) -->
   <script src="chatbot.js" defer></script>
 </body>
 </html>

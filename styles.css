@@ -1,31 +1,12 @@
-/* =========================================================
-   KAMPUS+ — ESTILOS DE LA PÁGINA
-   Versión 1.0 · Octubre de 2026
-   Autores: [completar con los nombres del equipo]
+/*
+  Kampus+ - estilos de la landing page
+  Versión 1.0 (octubre 2026)
+  Los estilos del chatbot están aparte en chatbot.css
+*/
 
-   Índice:
-   1. Base
-   2. Encabezado y menú
-   3. Inicio (hero)
-   4. ¿Qué es Kampus+?
-   5. Catálogo (compra)
-   6. Vende
-   7. ¿Cómo funciona?
-   8. Comunidad
-   9. Reseñas
-   10. Llamado final y pie de página
-   11. Ventanas emergentes
-   12. Colores de avatares e íconos
-   Los estilos del chatbot están aparte, en chatbot.css
-   ========================================================= */
+/* ==================== 1. BASE ==================== */
 
-/* =========================================================
-   1. BASE
-   Variables de color, tipografía, botones, etiquetas, fotos y animaciones
-   que usan todas las secciones. Debe cargarse primero.
-   ========================================================= */
-
-/* ---------- Variables y base ---------- */
+/* Variables y estilos base */
 :root {
   --blue: #1f5eff;
   --blue-600: #1a4fe0;
@@ -106,7 +87,8 @@ h1, h2, h3, h4, p { margin: 0; }
 }
 
 section[id] { scroll-margin-top: calc(var(--header-h) - 8px); }
-#calculadora { scroll-margin-top: calc(var(--header-h) + 20px); }
+#calculadora,
+#publish-phone { scroll-margin-top: calc(var(--header-h) + 20px); }
 
 .sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
 
@@ -150,7 +132,7 @@ section[id] { scroll-margin-top: calc(var(--header-h) - 8px); }
 .section-title--left,
 .section-lead--left { text-align: left; }
 
-/* ---------- Utilidades (botones, etiquetas, avatares, fotos) ---------- */
+/* Botones, etiquetas y elementos que se repiten */
 .ic {
   width: 1.15em;
   height: 1.15em;
@@ -164,7 +146,7 @@ section[id] { scroll-margin-top: calc(var(--header-h) - 8px); }
 .ic.star { color: var(--amber); }
 .ic.verified { color: var(--blue); width: 15px; height: 15px; }
 
-/* Foto con respaldo: si la imagen no carga, se ve un fondo suave con ícono */
+/* Contenedor de fotos: si la foto no carga se ve un fondo con un ícono */
 .media {
   position: relative;
   overflow: hidden;
@@ -251,12 +233,6 @@ section[id] { scroll-margin-top: calc(var(--header-h) - 8px); }
   box-shadow: 0 14px 28px -12px rgba(18, 183, 106, .7);
 }
 
-.btn--white {
-  color: var(--blue-700);
-  background: #fff;
-  box-shadow: 0 18px 34px -14px rgba(2, 6, 23, .45);
-}
-
 .btn--lg { padding: 18px 30px; font-size: 1.06rem; border-radius: 16px; }
 .btn--sm { padding: 11px 18px; font-size: .92rem; border-radius: 12px; }
 .btn--block { width: 100%; }
@@ -322,7 +298,7 @@ section[id] { scroll-margin-top: calc(var(--header-h) - 8px); }
 .stars .ic { width: 17px; height: 17px; }
 .stars--4 .ic:last-child { color: #dfe4ec; }
 
-/* ---------- Animaciones ---------- */
+/* Animaciones */
 .reveal {
   opacity: 0;
   transform: translateY(26px);
@@ -331,7 +307,7 @@ section[id] { scroll-margin-top: calc(var(--header-h) - 8px); }
 }
 .reveal.is-visible { opacity: 1; transform: none; }
 
-/* Retraso escalonado de la animación de entrada: d-1 aparece antes que d-5 */
+/* Retrasos para que los elementos aparezcan uno después de otro */
 .d-1 { --d: 1; }
 .d-2 { --d: 2; }
 .d-3 { --d: 3; }
@@ -389,7 +365,7 @@ section[id] { scroll-margin-top: calc(var(--header-h) - 8px); }
   .reveal { opacity: 1; transform: none; }
 }
 
-/* ---------- Adaptación a tablet y celular ---------- */
+/* Responsive */
 
 @media (max-width: 560px) {
   :root { --header-h: 64px; }
@@ -397,10 +373,7 @@ section[id] { scroll-margin-top: calc(var(--header-h) - 8px); }
   .badge { top: 8px; left: 8px; padding: 4px 8px; font-size: .64rem; }
 }
 
-/* =========================================================
-   2. ENCABEZADO Y MENÚ
-   Logo, menú de navegación y botón "Descargar app".
-   ========================================================= */
+/* ==================== 2. ENCABEZADO Y MENÚ ==================== */
 
 .header {
   position: fixed;
@@ -420,6 +393,7 @@ section[id] { scroll-margin-top: calc(var(--header-h) - 8px); }
 }
 
 .header__inner {
+  position: relative;
   height: 100%;
   display: flex;
   align-items: center;
@@ -471,10 +445,12 @@ section[id] { scroll-margin-top: calc(var(--header-h) - 8px); }
 .brand__name span { color: var(--blue); }
 
 /* Menú centrado */
+/* El menú va centrado en el encabezado */
 .nav {
-  flex: 1;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
-  justify-content: center;
 }
 .nav__list {
   display: flex;
@@ -502,7 +478,35 @@ section[id] { scroll-margin-top: calc(var(--header-h) - 8px); }
   box-shadow: 0 2px 8px -2px rgba(15, 23, 42, .12);
 }
 
-.nav__cta { display: none; }
+/* Campanita "Avísame del lanzamiento" (derecha del encabezado) */
+.header__notify {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin-left: auto;
+  border-radius: 50%;
+  color: var(--blue-700);
+  background: var(--blue-50);
+  box-shadow: inset 0 0 0 1px rgba(31, 94, 255, .18);
+  transition: background-color .2s, box-shadow .2s, transform .2s;
+}
+.header__notify:hover {
+  background: #fff;
+  box-shadow: inset 0 0 0 1px rgba(31, 94, 255, .4), 0 8px 18px -12px rgba(31, 94, 255, .6);
+  transform: translateY(-1px);
+}
+.header__notify .ic { width: 20px; height: 20px; }
+.header__notify:hover .ic { animation: ring .6s ease-in-out; }
+.header__notify .dot-live { position: absolute; top: 10px; right: 11px; }
+
+@keyframes ring {
+  0%, 100% { transform: rotate(0); }
+  25% { transform: rotate(14deg); }
+  50% { transform: rotate(-12deg); }
+  75% { transform: rotate(6deg); }
+}
 
 .nav-toggle {
   display: none;
@@ -518,11 +522,10 @@ section[id] { scroll-margin-top: calc(var(--header-h) - 8px); }
 .header.is-open .nav-toggle__open { display: none; }
 .header.is-open .nav-toggle__close { display: block; }
 
-/* ---------- Adaptación a tablet y celular ---------- */
+/* Responsive */
 
 @media (max-width: 1024px) {
-  .nav-toggle { display: grid; }
-  .header__cta { margin-left: auto; }
+  .nav-toggle { display: grid; margin-left: 10px; }
   .nav {
     position: fixed;
     top: var(--header-h);
@@ -556,16 +559,9 @@ section[id] { scroll-margin-top: calc(var(--header-h) - 8px); }
 @media (max-width: 560px) {
   .header .brand__name { font-size: 1.25rem; }
   .header .brand__mark { width: 34px; height: 34px; font-size: 1.05rem; }
-  .header__cta { display: none; }
-  .nav-toggle { margin-left: auto; }
-  .nav__cta { display: flex; margin-top: 12px; }
 }
 
-/* =========================================================
-   3. INICIO (HERO)
-   Portada: título, mensaje "Quiero vender", foto principal, tarjetas flotantes
-   y franja de universidades.
-   ========================================================= */
+/* ==================== 3. INICIO (HERO) ==================== */
 
 .hero {
   position: relative;
@@ -891,7 +887,7 @@ section[id] { scroll-margin-top: calc(var(--header-h) - 8px); }
 }
 .unis li:hover { color: var(--ink); }
 
-/* ---------- Adaptación a tablet y celular ---------- */
+/* Responsive */
 
 @media (max-width: 960px) {
   .hero__grid { grid-template-columns: 1fr; gap: 48px; }
@@ -924,10 +920,7 @@ section[id] { scroll-margin-top: calc(var(--header-h) - 8px); }
   .unis li { font-size: .9rem; }
 }
 
-/* =========================================================
-   4. ¿QUÉ ES KAMPUS+?
-   Tarjetas Compra, Vende y Conecta.
-   ========================================================= */
+/* ==================== 4. ¿QUÉ ES KAMPUS+? ==================== */
 
 .concept-grid {
   display: grid;
@@ -1020,7 +1013,7 @@ section[id] { scroll-margin-top: calc(var(--header-h) - 8px); }
   transform: rotate(45deg);
 }
 
-/* ---------- Adaptación a tablet y celular ---------- */
+/* Responsive */
 
 @media (max-width: 860px) {
   .concept-grid { grid-template-columns: 1fr; max-width: 560px; margin-left: auto; margin-right: auto; }
@@ -1030,10 +1023,7 @@ section[id] { scroll-margin-top: calc(var(--header-h) - 8px); }
   .concept-card__body { padding: 0 22px 22px; }
 }
 
-/* =========================================================
-   5. CATÁLOGO (COMPRA)
-   Buscador, filtros, orden y tarjetas de producto.
-   ========================================================= */
+/* ==================== 5. CATÁLOGO (COMPRA) ==================== */
 
 .catalog-tools {
   display: flex;
@@ -1306,7 +1296,7 @@ section[id] { scroll-margin-top: calc(var(--header-h) - 8px); }
 .catalog-empty h3 { font-size: 1.2rem; font-weight: 800; }
 .catalog-empty p { margin: 8px 0 20px; color: var(--muted); }
 
-/* ---------- Adaptación a tablet y celular ---------- */
+/* Responsive */
 
 @media (max-width: 1180px) {
   .product-grid { grid-template-columns: repeat(3, 1fr); }
@@ -1352,10 +1342,7 @@ section[id] { scroll-margin-top: calc(var(--header-h) - 8px); }
   .product__seller .avatar { display: grid; }
 }
 
-/* =========================================================
-   6. VENDE
-   Celular con el formulario de publicación, beneficios y calculadora de ingresos.
-   ========================================================= */
+/* ==================== 6. VENDE ==================== */
 
 .sell-grid {
   display: grid;
@@ -1792,7 +1779,7 @@ section[id] { scroll-margin-top: calc(var(--header-h) - 8px); }
 }
 .calc__breakdown { font-size: .78rem; color: #8fa6d9; }
 
-/* ---------- Adaptación a tablet y celular ---------- */
+/* Responsive */
 
 @media (max-width: 960px) {
   .sell-grid { grid-template-columns: 1fr; gap: 56px; }
@@ -1809,10 +1796,7 @@ section[id] { scroll-margin-top: calc(var(--header-h) - 8px); }
   .phone__screen { height: 660px; }
 }
 
-/* =========================================================
-   7. ¿CÓMO FUNCIONA?
-   Pestañas comprador / vendedor y los pasos con sus mini pantallas.
-   ========================================================= */
+/* ==================== 7. ¿CÓMO FUNCIONA? ==================== */
 
 .switch {
   position: relative;
@@ -2036,7 +2020,7 @@ section[id] { scroll-margin-top: calc(var(--header-h) - 8px); }
 .mini-cash strong { display: block; margin: 2px 0; font-size: 1.05rem; font-weight: 800; color: #065f3b; }
 .mini-cash span { font-size: .72rem; color: #3f7a62; }
 
-/* ---------- Adaptación a tablet y celular ---------- */
+/* Responsive */
 
 @media (max-width: 860px) {
   .steps { grid-template-columns: 1fr; max-width: 560px; margin-left: auto; margin-right: auto; }
@@ -2046,10 +2030,7 @@ section[id] { scroll-margin-top: calc(var(--header-h) - 8px); }
   .switch__btn { padding: 10px 18px; font-size: .88rem; }
 }
 
-/* =========================================================
-   8. COMUNIDAD
-   Lista de confianza, foto, perfil verificado y mapa de puntos seguros.
-   ========================================================= */
+/* ==================== 8. COMUNIDAD ==================== */
 
 .community {
   display: grid;
@@ -2219,7 +2200,7 @@ section[id] { scroll-margin-top: calc(var(--header-h) - 8px); }
   background: var(--blue);
 }
 
-/* ---------- Adaptación a tablet y celular ---------- */
+/* Responsive */
 
 @media (max-width: 960px) {
   .community { grid-template-columns: 1fr; gap: 44px; }
@@ -2233,10 +2214,7 @@ section[id] { scroll-margin-top: calc(var(--header-h) - 8px); }
   .map-card__map { min-height: 130px; }
 }
 
-/* =========================================================
-   9. RESEÑAS
-   Calificación promedio y tarjetas de reseñas (carrusel en celular).
-   ========================================================= */
+/* ==================== 9. RESEÑAS ==================== */
 
 .reviews-summary {
   display: flex;
@@ -2344,10 +2322,10 @@ section[id] { scroll-margin-top: calc(var(--header-h) - 8px); }
   color: var(--muted);
 }
 
-/* ---------- Adaptación a tablet y celular ---------- */
+/* Responsive */
 
 @media (max-width: 860px) {
-  /* Reseñas en carrusel deslizable */
+  /* En celular las reseñas se deslizan de lado */
   .reviews {
     grid-auto-flow: column;
     grid-template-columns: none;
@@ -2383,12 +2361,9 @@ section[id] { scroll-margin-top: calc(var(--header-h) - 8px); }
   .reviews-summary { padding: 16px 18px; }
 }
 
-/* =========================================================
-   10. LLAMADO FINAL Y PIE DE PÁGINA
-   Banner azul "Tu campus también puede ser un marketplace" y footer.
-   ========================================================= */
+/* ==================== 10. LLAMADO FINAL Y PIE DE PÁGINA ==================== */
 
-/* ---------- Llamado final ---------- */
+/* Banner final */
 .cta-section { padding: 0 0 clamp(80px, 10vw, 120px); background: var(--bg-soft); }
 .cta {
   position: relative;
@@ -2425,7 +2400,62 @@ section[id] { scroll-margin-top: calc(var(--header-h) - 8px); }
   letter-spacing: -.035em;
   text-wrap: balance;
 }
-.cta p { max-width: 560px; margin-bottom: 30px; font-size: 1.08rem; color: rgba(255, 255, 255, .86); }
+.cta p { max-width: 560px; font-size: 1.08rem; color: rgba(255, 255, 255, .86); }
+/* Formulario de novedades */
+.notify {
+  display: flex;
+  gap: 8px;
+  width: min(100%, 520px);
+  margin-top: 28px;
+  padding: 6px;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 18px 34px -14px rgba(2, 6, 23, .45);
+  transition: box-shadow .2s;
+}
+.notify:focus-within { box-shadow: 0 0 0 4px rgba(255, 255, 255, .45), 0 18px 34px -14px rgba(2, 6, 23, .45); }
+.notify.is-error { box-shadow: 0 0 0 3px #fca5a5, 0 18px 34px -14px rgba(2, 6, 23, .45); }
+.notify__field {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  padding: 0 12px;
+  color: var(--muted);
+}
+.notify__field .ic { width: 20px; height: 20px; flex-shrink: 0; }
+.notify__field input {
+  width: 100%;
+  min-width: 0;
+  height: 48px;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  font: inherit;
+  font-size: 1rem;
+  color: var(--ink);
+}
+.notify .btn { padding: 12px 20px; border-radius: 13px; }
+.cta .notify__msg {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 520px;
+  margin-top: 14px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: .92rem;
+  font-weight: 600;
+  color: #fff;
+  text-align: left;
+}
+.notify__msg .ic { width: 18px; height: 18px; flex-shrink: 0; }
+.notify__msg.is-error { background: rgba(239, 68, 68, .35); }
+.notify__msg.is-ok { background: rgba(18, 183, 106, .38); }
+.cta .notify__note { margin-top: 14px; font-size: .84rem; color: rgba(255, 255, 255, .75); }
+.notify__note button { color: #fff; font-weight: 700; text-decoration: underline; text-underline-offset: 2px; }
+
 .cta__checks {
   display: flex;
   flex-wrap: wrap;
@@ -2438,7 +2468,7 @@ section[id] { scroll-margin-top: calc(var(--header-h) - 8px); }
 .cta__checks li { display: flex; align-items: center; gap: 8px; font-size: .9rem; font-weight: 600; }
 .cta__checks .ic { width: 16px; height: 16px; stroke-width: 3; color: #6ee7b7; }
 
-/* ---------- Pie de página ---------- */
+/* Footer */
 .footer {
   padding: 76px 0 28px;
   color: #aab7d4;
@@ -2467,7 +2497,7 @@ section[id] { scroll-margin-top: calc(var(--header-h) - 8px); }
   transition: transform .25s var(--ease), background-color .25s, border-color .25s, color .25s;
 }
 .socials a:hover { transform: translateY(-3px); color: #fff; }
-/* Al pasar el mouse, cada red toma su color oficial */
+/* Al pasar el mouse cada red toma su color */
 .social--instagram:hover { background: #e4405f; border-color: #e4405f; }
 .social--tiktok:hover    { background: #000; border-color: #25f4ee; box-shadow: 2px 2px 0 #fe2c55; }
 .social--whatsapp:hover  { background: #25d366; border-color: #25d366; }
@@ -2501,7 +2531,6 @@ section[id] { scroll-margin-top: calc(var(--header-h) - 8px); }
 .ic--blue { color: #60a5fa; }
 .ic--green { color: #34d399; }
 .ic--pink { color: #f472b6; }
-.footer__cta { width: 100%; margin-top: 22px; }
 
 .footer__bottom {
   display: flex;
@@ -2522,7 +2551,7 @@ section[id] { scroll-margin-top: calc(var(--header-h) - 8px); }
 }
 .footer__bottom button:hover { color: #fff; }
 
-/* Aviso legal (proyecto académico) */
+/* Aviso legal */
 .footer__legal p {
   margin-top: 18px;
   padding-top: 18px;
@@ -2532,7 +2561,7 @@ section[id] { scroll-margin-top: calc(var(--header-h) - 8px); }
   border-top: 1px solid #16203f;
 }
 
-/* ---------- Adaptación a tablet y celular ---------- */
+/* Responsive */
 
 @media (max-width: 860px) {
   .footer__grid { grid-template-columns: 1fr 1fr; }
@@ -2540,16 +2569,14 @@ section[id] { scroll-margin-top: calc(var(--header-h) - 8px); }
 
 @media (max-width: 560px) {
   .cta { border-radius: 28px; }
-  .cta .btn { width: 100%; }
   .cta__checks { flex-direction: column; align-items: center; }
+  .notify { flex-direction: column; }
+  .notify .btn { width: 100%; }
   .footer__grid { grid-template-columns: 1fr; gap: 34px; }
   .footer__bottom { flex-direction: column; }
 }
 
-/* =========================================================
-   11. VENTANAS EMERGENTES
-   Ventana "Descargar aplicación", ficha de producto y aviso flotante.
-   ========================================================= */
+/* ==================== 11. VENTANAS EMERGENTES ==================== */
 
 .modal {
   width: min(440px, calc(100% - 32px));
@@ -2846,7 +2873,7 @@ button.store-btn { width: 100%; text-align: left; }
 .toast .ic { color: #34d399; }
 .toast.is-visible { opacity: 1; transform: translate(-50%, 0); }
 
-/* ---------- Adaptación a tablet y celular ---------- */
+/* Responsive */
 
 @media (max-width: 860px) {
   .modal--product { width: min(520px, calc(100% - 32px)); }
@@ -2874,10 +2901,8 @@ button.store-btn { width: 100%; text-align: left; }
   }
 }
 
-/* =========================================================
-   12. COLORES DE AVATARES E ÍCONOS
-   Van al final para que tengan prioridad sobre los colores por defecto.
-   ========================================================= */
+/* ==================== 12. COLORES DE AVATARES E ÍCONOS ==================== */
+/* van al final para que no los pisen otras reglas */
 .c-blue   { --c: #1f5eff; }
 .c-sky    { --c: #0284c7; }
 .c-indigo { --c: #4f46e5; }

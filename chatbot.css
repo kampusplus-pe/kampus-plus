@@ -1,13 +1,9 @@
-/* =========================================================
-   KAMPUS+ — CHATBOT (ASISTENTE VIRTUAL)
-   Versión 1.0 · Octubre de 2026
-   Autores: [completar con los nombres del equipo]
-
-   Se carga después de styles.css porque usa sus colores y variables.
-   Botón flotante y ventana del chat. Todas las reglas empiezan con ".chatbot"
-   para que los nombres del ejemplo de clase (.cabecera, .mensajes, .entrada...)
-   no afecten al resto de la página.
-   ========================================================= */
+/*
+  Kampus+ - estilos del chatbot
+  Se carga después de styles.css porque usa sus colores.
+  Todo empieza con .chatbot para que las clases del ejemplo de clase
+  (.cabecera, .mensajes, .entrada) no choquen con el resto de la página.
+*/
 
 .chatbot {
   position: fixed;
@@ -36,7 +32,7 @@
 .chatbot.is-open .chatbot__launcher-open { opacity: 0; transform: rotate(90deg); }
 .chatbot.is-open .chatbot__launcher-close { opacity: 1; transform: none; }
 
-/* Onda que llama la atención mientras hay un mensaje sin leer */
+/* Efecto de onda cuando hay un mensaje sin leer */
 .chatbot__launcher::before {
   content: "";
   position: absolute;
@@ -414,7 +410,7 @@
   to { opacity: 1; transform: none; }
 }
 
-/* Chatbot en celular: el chat ocupa toda la pantalla */
+/* En celular el chat ocupa toda la pantalla */
 @media (max-width: 560px) {
   .chatbot { right: 16px; bottom: 16px; }
   .chatbot__launcher { width: 56px; height: 56px; }

@@ -1,80 +1,38 @@
-/* =========================================================
-   KAMPUS+ — CHATBOT (ASISTENTE VIRTUAL)
-   Versión 1.0 · Octubre de 2026
-   Autores: [completar con los nombres del equipo]
-   ---------------------------------------------------------
-   Funciona igual que el ejemplo de clase (CRONICS ASESOR):
-
-     1) El usuario escribe y presiona Enviar o Enter  → enviarMensaje()
-     2) Su mensaje aparece en pantalla                → agregarMensaje('usuario', ...)
-     3) El bot "piensa" un momento y responde          → procesarRespuesta(texto)
-
-   procesarRespuesta() revisa el mensaje en este orden y se
-   detiene en la primera regla que se cumple:
-     a) Comandos: /listar, /ayuda
-     b) ID de un producto: 001, 002...
-     c) Precio máximo: "menos de S/ 100", "algo barato"
-     d) Nombre o palabra clave de un producto: "casio", "mochila"
-     e) Categoría: "libros", "tecnología"...
-     f) Preguntas frecuentes: comisión, pagos, entregas...
-     g) Si nada coincide, una respuesta por defecto.
-
-   IMPORTANTE: este archivo usa los productos y algunas funciones
-   de script.js (a través de window.Kampus). Por eso en el HTML
-   se carga DESPUÉS de script.js.
-
-   Índice:
-   1. Datos y funciones que vienen de script.js
-   2. Referencias a elementos del HTML
-   3. Base de datos del chatbot
-   4. Utilidades del chatbot
-   5. Plantillas de respuesta (HTML)
-   6. Preguntas frecuentes
-   7. Mostrar mensajes en el chat
-   8. Enviar un mensaje
-   9. Cerebro del chatbot
-   10. Clics dentro del chat
-   11. Abrir y cerrar el chat
-   ========================================================= */
+/*
+  Kampus+ - chatbot (asistente virtual)
+  Lo hicimos a partir del ejemplo que vimos en clase (CRONICS ASESOR).
+  Funciona así: enviarMensaje() muestra el mensaje del usuario con agregarMensaje()
+  y después procesarRespuesta() busca qué contestar.
+  Usa los productos de script.js, por eso en el HTML se carga después.
+*/
 (() => {
   'use strict';
 
-  /* ---------- 1. Datos y funciones que vienen de script.js ---------- */
+  // ===== 1. Datos y funciones que vienen de script.js =====
   const {
-    PRODUCTS,      // Catálogo de productos
-    CATEGORIES,    // Nombres de las categorías
-    SELLERS,       // Datos de los vendedores
-    photo,         // Arma la dirección de la foto de un producto
-    money,         // Da formato de soles: 65 → "S/ 65"
-    normalize,     // Minúsculas y sin tildes: "Tecnología" → "tecnologia"
-    discount,      // Porcentaje de descuento frente al precio de tienda
-    icon,          // Dibuja un ícono del HTML
-    toast,         // Muestra un aviso flotante
-    openProduct,   // Abre la ficha de un producto
-    reduceMotion   // true si el usuario prefiere menos animaciones
+    PRODUCTS, CATEGORIES, SELLERS,
+    photo, money, normalize, discount, icon, toast, openProduct, reduceMotion
   } = window.Kampus;
 
   const $ = (sel, ctx = document) => ctx.querySelector(sel);
   const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
 
-  /* ---------- 2. Referencias a elementos del HTML ---------- */
-  const chatbot = $('#chatbot');                 // Contenedor general (botón + panel)
-  const chatPanel = $('#chatbot-panel');         // Ventana del chat
-  const chatLauncher = $('#chatbot-launcher');   // Botón redondo flotante
-  const chatHint = $('#chatbot-hint');           // Globo de invitación
-  const input = $('#inputMensaje');              // Campo donde escribe el usuario
-  const boton = $('#botonEnviar');               // Botón Enviar
-  const cuerpo = $('#cuerpoChat');               // Contenedor de los mensajes
-  const FOTO_RESPALDO = 'img/producto.png';      // Imagen genérica si una foto no carga
+  // ===== 2. Referencias a elementos del HTML =====
+  const chatbot = $('#chatbot');
+  const chatPanel = $('#chatbot-panel');
+  const chatLauncher = $('#chatbot-launcher'); // botón redondo
+  const chatHint = $('#chatbot-hint'); // globo de invitación
+  const input = $('#inputMensaje');
+  const boton = $('#botonEnviar');
+  const cuerpo = $('#cuerpoChat');
+  const FOTO_RESPALDO = 'img/producto.png'; // se usa si una foto no carga
 
-  /* ---------- 3. Base de datos del chatbot ----------
-     En el ejemplo de clase los productos se escribían a mano.
-     Aquí se arman automáticamente con el catálogo de la página (PRODUCTS):
-     si agregas un producto al catálogo, el chatbot también lo conocerá.
-     Cada producto recibe un ID de 3 dígitos (1 → "001").
-
-     PALABRAS_CLAVE: palabras con las que el usuario puede referirse a cada
-     producto. Escríbelas en minúsculas y sin tildes. */
+  // ===== 3. Productos del chatbot =====
+  // En el ejemplo de clase los productos se escribían a mano. Nosotros usamos
+  // el mismo catálogo de la página (PRODUCTS) para no repetir datos, así si
+  // agregamos un producto el chatbot también lo reconoce.
+  // A cada producto le damos un ID de 3 dígitos (1 = "001").
+  // PALABRAS_CLAVE: otras formas de nombrar cada producto (en minúsculas y sin tildes).
   const PALABRAS_CLAVE = {
     '001': ['calculadora', 'casio', 'fx-991', 'fx991', 'cientifica'],
     '002': ['poleron', 'hoodie', 'jean', 'casaca'],
@@ -94,13 +52,13 @@
   PRODUCTS.forEach((p) => {
     const id = String(p.id).padStart(3, '0');
     productos[id] = {
-      id,                                        // "001"
-      idCatalogo: p.id,                          // 1 (para abrir la ficha del catálogo)
+      id, // "001"
+      idCatalogo: p.id, // para abrir la ficha del catálogo
       nombre: p.title,
       precio: p.price,
       precioTienda: p.oldPrice,
-      categoria: CATEGORIES[p.category],         // "Tecnología"
-      claveCategoria: p.category,                // "tecnologia"
+      categoria: CATEGORIES[p.category], // "Tecnología"
+      claveCategoria: p.category, // "tecnologia"
       descripcion: p.description,
       stock: p.stock,
       oferta: `${discount(p)}% menos que en tienda`,
@@ -122,18 +80,18 @@
     otros: ['otros', 'hogar']
   };
 
-  /* ---------- 4. Utilidades del chatbot ---------- */
+  // ===== 4. Utilidades del chatbot =====
 
-  // Busca una palabra completa dentro del texto (acepta plurales: mochila → mochilas)
+  // Busca una palabra completa en el texto (también acepta plurales, mochila o mochilas)
   function contienePalabra(texto, palabra) {
     const segura = palabra.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     return new RegExp(`(^|[^a-z0-9])${segura}(e?s)?([^a-z0-9]|$)`).test(texto);
   }
 
-  // ¿El texto contiene alguno de estos fragmentos? (igual que .includes() del ejemplo)
+  // Revisa si el texto tiene alguno de estos fragmentos (como el .includes() del ejemplo)
   const incluye = (texto, lista) => lista.some((fragmento) => texto.includes(fragmento));
 
-  // Nombre corto para las sugerencias: "Calculadora científica Casio fx-991LA CW" → "Calculadora científica Casio"
+  // Nombre corto para las sugerencias, por ejemplo "Calculadora científica Casio"
   function nombreCorto(nombre) {
     const palabras = nombre.replace(/[,:(].*$/, '').split(' ').slice(0, 3);
     while (palabras.length > 1 && ['y', 'de', 'del', 'con', 'para', '+', 'a', 'la', 'el'].includes(palabras[palabras.length - 1].toLowerCase())) {
@@ -142,7 +100,7 @@
     return palabras.join(' ');
   }
 
-  /* ---------- 5. Plantillas de respuesta (HTML) ---------- */
+  // ===== 5. Plantillas de respuesta (HTML) =====
 
   // Ficha completa de un producto (equivale al "CASO 3" del ejemplo)
   function fichaProducto(p) {
@@ -191,9 +149,9 @@
     y resolver tus dudas sobre pagos y entregas.</p>
     <p>Escribe <code>/listar</code> para ver el catálogo o elige una opción de abajo.</p>`;
 
-  /* ---------- 6. Preguntas frecuentes ----------
-     Cada tema tiene sus palabras clave y su respuesta.
-     El orden importa: se usa el PRIMER tema que coincida. */
+  // ===== 6. Preguntas frecuentes =====
+  // Cada tema tiene sus palabras clave y su respuesta.
+  // Se usa el primer tema que coincida, por eso importa el orden.
   const TEMAS = [
     {
       claves: ['comision', 'cobran', 'cobra ', 'cuanto gano', 'ganancia', 'porcentaje', '5%', 'tarifa'],
@@ -220,8 +178,8 @@
       respuesta: () => `
         <p>Puedes escribirle al equipo de Kampus+:</p>
         <ul>
-          <li>📧 <a href="mailto:kampusplus.pe@gmail.com"><strong>kampusplus.pe@gmail.com</strong></a></li>
-          <li>💬 WhatsApp: <a href="https://wa.me/51967207495" target="_blank" rel="noopener"><strong>+51 967 207 495</strong></a></li>
+          <li>Correo: <a href="mailto:kampusplus.pe@gmail.com"><strong>kampusplus.pe@gmail.com</strong></a></li>
+          <li>WhatsApp: <a href="https://wa.me/51967207495" target="_blank" rel="noopener"><strong>+51 967 207 495</strong></a></li>
         </ul>`
     },
     {
@@ -229,10 +187,10 @@
       respuesta: () => `
         <p>Kampus+ está pensado para que compres y vendas tranquilo:</p>
         <ul>
-          <li>✅ Solo estudiantes con correo <strong>@edu.pe</strong></li>
-          <li>✅ Perfiles con carrera, ciclo y calificaciones</li>
-          <li>✅ Pago protegido hasta que confirmas la entrega</li>
-          <li>✅ Entregas en lugares públicos cerca a tu U</li>
+          <li>Solo estudiantes con correo <strong>@edu.pe</strong></li>
+          <li>Perfiles con carrera, ciclo y calificaciones</li>
+          <li>Pago protegido hasta que confirmas la entrega</li>
+          <li>Entregas en lugares públicos cerca a tu U</li>
         </ul>`
     },
     {
@@ -296,10 +254,10 @@
       respuesta: () => `
         <p>Esto es lo que puedo hacer por ti:</p>
         <ul>
-          <li>📋 <code>/listar</code> muestra todos los productos</li>
-          <li>🔎 Escribe un producto (<em>mochila</em>, <em>casio</em>) o su ID (<code>001</code>)</li>
-          <li>💸 Pide opciones por precio: <em>menos de S/ 100</em></li>
-          <li>❓ Pregunta por comisión, pagos, entregas o seguridad</li>
+          <li><code>/listar</code> muestra todos los productos</li>
+          <li>Escribe un producto (<em>mochila</em>, <em>casio</em>) o su ID (<code>001</code>)</li>
+          <li>Pide opciones por precio: <em>menos de S/ 100</em></li>
+          <li>Pregunta por comisión, pagos, entregas o seguridad</li>
         </ul>`
     },
     {
@@ -324,22 +282,21 @@
     }
   ];
 
-  /* ---------- 7. Mostrar mensajes en el chat ---------- */
+  // ===== 7. Mostrar mensajes en el chat =====
 
   // Inserta un mensaje en el cuerpo del chat (igual que en el ejemplo)
   function agregarMensaje(tipo, contenido) {
-    const mensaje = document.createElement('div');   // Crea la burbuja
-    mensaje.className = 'mensaje ' + tipo;           // Clase "usuario" o "bot"
+    const mensaje = document.createElement('div'); // Crea la burbuja
+    mensaje.className = 'mensaje ' + tipo; // Clase "usuario" o "bot"
 
-    // IMPORTANTE (mejora de seguridad respecto al ejemplo):
-    // el texto del usuario se inserta con textContent para que nadie pueda
-    // "inyectar" código HTML. Las respuestas del bot sí usan innerHTML porque
-    // las escribimos nosotros.
+    // A diferencia del ejemplo, el mensaje del usuario va con textContent
+    // para que no se pueda meter código HTML en el chat.
+    // Las respuestas del bot sí van con innerHTML porque las escribimos nosotros.
     if (tipo === 'usuario') mensaje.textContent = contenido;
     else mensaje.innerHTML = contenido;
 
-    cuerpo.appendChild(mensaje);                     // Lo añade al chat
-    cuerpo.scrollTop = cuerpo.scrollHeight;          // Baja al último mensaje
+    cuerpo.appendChild(mensaje); // Lo añade al chat
+    cuerpo.scrollTop = cuerpo.scrollHeight; // Baja al último mensaje
     return mensaje;
   }
 
@@ -350,7 +307,7 @@
     return burbuja;
   }
 
-  /* ---------- 8. Enviar un mensaje ---------- */
+  // ===== 8. Enviar un mensaje =====
 
   // Activa o desactiva el botón Enviar según haya texto (igual que en el ejemplo)
   input.addEventListener('input', () => {
@@ -366,37 +323,37 @@
     }
   });
 
-  // Función principal: recibe el texto (del campo o de una sugerencia)
+  // Función principal, recibe el texto del campo o de una sugerencia
   function enviarMensaje(textoSugerido) {
     const texto = (textoSugerido ?? input.value).trim();
-    if (texto === '') return;                        // No enviar si está vacío
+    if (texto === '') return; // No enviar si está vacío
 
-    agregarMensaje('usuario', texto);                // 1) Mostrar mensaje del usuario
-    input.value = '';                                // 2) Limpiar el campo
-    input.dispatchEvent(new Event('input'));         //    y desactivar el botón
+    agregarMensaje('usuario', texto); // 1) Mostrar mensaje del usuario
+    input.value = ''; // 2) Limpiar el campo
+    input.dispatchEvent(new Event('input')); //    y desactivar el botón
 
-    const escribiendo = mostrarEscribiendo();        // 3) "Escribiendo..."
+    const escribiendo = mostrarEscribiendo(); // 3) "Escribiendo..."
     const espera = 500 + Math.min(texto.length * 15, 500);
     setTimeout(() => {
       escribiendo.remove();
-      procesarRespuesta(texto);                      // 4) Respuesta del bot
+      procesarRespuesta(texto); // 4) Respuesta del bot
     }, reduceMotion ? 150 : espera);
   }
 
-  /* ---------- 9. Cerebro del chatbot ---------- */
+  // ===== 9. Cerebro del chatbot =====
   function procesarRespuesta(texto) {
-    // Minúsculas y sin tildes para comparar fácilmente ("Tecnología" → "tecnologia")
+    // Pasamos a minúsculas y sin tildes para comparar más fácil ("Tecnología" queda "tecnologia")
     const mensaje = normalize(texto);
     // Versión sin signos (¿ ? ¡ ! , ;) y con espacios a los lados, para buscar palabras sueltas como " app "
     const conEspacios = ` ${mensaje.replace(/[¿?¡!,;:]/g, ' ').replace(/\.(\s|$)/g, ' ')} `;
 
-    // a) COMANDOS: /listar o frases como "ver productos", "catálogo"
+    // a) Comandos: /listar o frases como "ver productos" o "catálogo"
     if (mensaje.startsWith('/listar') || incluye(mensaje, ['catalogo', 'ver productos', 'todos los productos', 'lista de productos'])) {
       agregarMensaje('bot', listaHTML(`Productos disponibles (${listaProductos.length}):`, listaProductos));
       return;
     }
 
-    // b) ID DE PRODUCTO: "001", "producto 5", "id 12", "#3"
+    // b) ID del producto: "001", "producto 5", "id 12", "#3"
     const matchId = mensaje.match(/(?:^|[^0-9])(0\d{2})(?:[^0-9]|$)/) ||
                     mensaje.match(/(?:id|producto|codigo|#)\s*#?\s*(\d{1,3})(?:[^0-9]|$)/);
     if (matchId) {
@@ -409,7 +366,7 @@
       return;
     }
 
-    // c) PRECIO MÁXIMO: "menos de 100", "hasta S/ 50", "algo barato"
+    // c) Precio máximo: "menos de 100", "hasta S/ 50", "algo barato"
     const matchPrecio = mensaje.match(/(?:menos de|hasta|maximo|max|por debajo de|menor a|no mas de)\s*(?:s\/\.?\s*)?(\d+)/);
     if (matchPrecio) {
       const limite = Number(matchPrecio[1]);
@@ -428,8 +385,8 @@
       return;
     }
 
-    // d) PRODUCTO POR NOMBRE O PALABRA CLAVE
-    //    Cada producto suma 1 punto por cada palabra clave que aparece en el mensaje.
+    // d) Producto por nombre o palabra clave
+    // Cada producto suma un punto por cada palabra clave que aparece en el mensaje.
     const puntajes = listaProductos
       .map((p) => ({ p, puntos: p.palabras.filter((w) => contienePalabra(mensaje, w)).length +
                                  (mensaje.includes(normalize(p.nombre)) ? 3 : 0) }))
@@ -445,7 +402,7 @@
       return;
     }
 
-    // e) CATEGORÍA: "libros", "tecnología", "ropa"...
+    // e) Categoría: "libros", "tecnología", "ropa", etc.
     for (const clave in PALABRAS_CATEGORIA) {
       if (PALABRAS_CATEGORIA[clave].some((w) => contienePalabra(mensaje, w))) {
         const deCategoria = listaProductos.filter((p) => p.claveCategoria === clave);
@@ -456,20 +413,20 @@
       }
     }
 
-    // Frases generales como "¿qué venden?" o "¿qué tienen?" → catálogo completo
+    // Frases generales como "¿qué venden?" o "¿qué tienen?" muestran todo el catálogo
     if (incluye(mensaje, ['que venden', 'que tienen', 'que hay'])) {
       agregarMensaje('bot', listaHTML(`Productos disponibles (${listaProductos.length}):`, listaProductos));
       return;
     }
 
-    // f) PREGUNTAS FRECUENTES
+    // f) Preguntas frecuentes
     const tema = TEMAS.find((t) => incluye(conEspacios, t.claves));
     if (tema) {
       agregarMensaje('bot', tema.respuesta(mensaje));
       return;
     }
 
-    // g) RESPUESTA POR DEFECTO
+    // g) Si no entendió nada, respuesta por defecto
     agregarMensaje('bot', `
       <p>Lo siento, aún estoy aprendiendo 🤖 y no entendí tu mensaje.</p>
       <p>Puedes probar con <code>/listar</code>, el nombre de un producto (por ejemplo <em>mochila</em>),
@@ -491,7 +448,7 @@
     }, reduceMotion ? 0 : 600);
   }
 
-  /* ---------- 10. Clics dentro del chat ---------- */
+  // ===== 10. Clics dentro del chat =====
   cuerpo.addEventListener('click', (e) => {
     // Botones que envían una pregunta (lista de productos, sugerencias)
     const pregunta = e.target.closest('[data-ask]');
@@ -519,7 +476,7 @@
     chip.addEventListener('click', () => enviarMensaje(chip.dataset.ask));
   });
 
-  /* ---------- 11. Abrir y cerrar el chat ---------- */
+  // ===== 11. Abrir y cerrar el chat =====
   function abrirChat() {
     chatbot.classList.add('is-open');
     chatbot.classList.remove('has-unread');
@@ -540,7 +497,7 @@
     document.body.classList.remove('chat-open');
   }
 
-  // Enlaces de la página que abren el chat (por ejemplo, "Preguntas frecuentes" del pie de página)
+  // Enlaces que abren el chat, como "Preguntas frecuentes" del footer
   $$('[data-open-chat]').forEach((enlace) => {
     enlace.addEventListener('click', (e) => {
       e.preventDefault();
