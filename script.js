@@ -657,6 +657,13 @@
   });
   notifyEmail.addEventListener('input', () => notifyForm.classList.remove('is-error'));
 
+  // El botón "Avísame del lanzamiento" del encabezado baja al formulario y deja el cursor en el campo
+  $$('a[href="#novedades"]').forEach((enlace) => {
+    enlace.addEventListener('click', () => {
+      setTimeout(() => notifyEmail.focus({ preventScroll: true }), reduceMotion ? 0 : 700);
+    });
+  });
+
   // ===== 9. Pestañas "¿Cómo funciona?" =====
   const switchEl = $('.switch');
   const tabs = $$('.switch__btn');
